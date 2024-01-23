@@ -1,8 +1,11 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:expenso/MonthShow.dart';
 import 'package:expenso/components/expense_summary.dart';
 import 'package:expenso/components/expense_tile.dart';
 import 'package:expenso/data/expense_data.dart';
 import 'package:expenso/models/expense_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -53,6 +56,7 @@ class _HomePageState extends State<HomePage> {
                           child: TextField(
                             textInputAction: TextInputAction.next,
                             textCapitalization: TextCapitalization.words,
+                            autofocus: true,
                             decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Expense Name",
@@ -81,6 +85,9 @@ class _HomePageState extends State<HomePage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: TextField(
+                            onSubmitted: (value) {
+                              save();
+                            },
                             decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Price",
@@ -97,75 +104,77 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        MaterialButton(
-                          onPressed: () {
-                            setState(() {
-                              newExpenseNameController.value =
-                                  const TextEditingValue(text: "Bunty Bhaiya");
-                            });
-                          },
-                          child: Image.asset('images/chai.png'),
-                        ),
-                        // MaterialButton(
-                        //   onPressed: () {
-                        //     setState(() {
-                        //       price = 60;
-                        //       newExpenseNameController.value =
-                        //           const TextEditingValue(text: "Tiffin");
-                        //       newExpenseAmountController.value =
-                        //           TextEditingValue(text: '$price');
-                        //     });
-                        //   },
-                        //   child: Image.asset('images/tiffin.png'),
-                        // ),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          MaterialButton(
+                            onPressed: () {
+                              setState(() {
+                                newExpenseNameController.value =
+                                    const TextEditingValue(text: "Snacks");
+                              });
+                            },
+                            child: Image.asset('images/chai.png'),
+                          ),
+                          // MaterialButton(
+                          //   onPressed: () {
+                          //     setState(() {
+                          //       price = 60;
+                          //       newExpenseNameController.value =
+                          //           const TextEditingValue(text: "Tiffin");
+                          //       newExpenseAmountController.value =
+                          //           TextEditingValue(text: '$price');
+                          //     });
+                          //   },
+                          //   child: Image.asset('images/tiffin.png'),
+                          // ),
 
-                        MaterialButton(
-                          onPressed: () {
-                            setState(() {
-                              newExpenseNameController.value =
-                                  const TextEditingValue(text: "Vegetables");
-                              newExpenseAmountController.clear();
-                            });
-                          },
-                          child: Image.asset('images/vegetables.png'),
-                        ),
-                        MaterialButton(
-                          onPressed: () {
-                            setState(() {
-                              newExpenseNameController.value =
-                                  const TextEditingValue(text: "Medicine");
-                            });
-                          },
-                          child: Image.asset('images/medicine.png'),
-                        ),
-                        MaterialButton(
-                          onPressed: () {
-                            setState(() {
-                              price = 7;
-                              newExpenseNameController.value =
-                                  const TextEditingValue(text: "Egg");
-                              newExpenseAmountController.value =
-                                  TextEditingValue(text: '$price');
-                            });
-                          },
-                          child: Image.asset('images/egg.png'),
-                        ),
-                        MaterialButton(
-                          onPressed: () {
-                            setState(() {
-                              newExpenseNameController.value =
-                                  const TextEditingValue(text: "Spicey");
-                              newExpenseAmountController.clear();
-                            });
-                          },
-                          child: Image.asset('images/spicey.png'),
-                        ),
-                      ],
+                          MaterialButton(
+                            onPressed: () {
+                              setState(() {
+                                newExpenseNameController.value =
+                                    const TextEditingValue(text: "Vegetables");
+                                newExpenseAmountController.clear();
+                              });
+                            },
+                            child: Image.asset('images/vegetables.png'),
+                          ),
+                          MaterialButton(
+                            onPressed: () {
+                              setState(() {
+                                newExpenseNameController.value =
+                                    const TextEditingValue(text: "Medicine");
+                              });
+                            },
+                            child: Image.asset('images/medicine.png'),
+                          ),
+                          // MaterialButton(
+                          //   onPressed: () {
+                          //     setState(() {
+                          //       price = 7;
+                          //       newExpenseNameController.value =
+                          //           const TextEditingValue(text: "Egg");
+                          //       newExpenseAmountController.value =
+                          //           TextEditingValue(text: '$price');
+                          //     });
+                          //   },
+                          //   child: Image.asset('images/egg.png'),
+                          // ),
+                          // MaterialButton(
+                          //   onPressed: () {
+                          //     setState(() {
+                          //       newExpenseNameController.value =
+                          //           const TextEditingValue(text: "Spicey");
+                          //       newExpenseAmountController.clear();
+                          //     });
+                          //   },
+                          //   child: Image.asset('images/spicey.png'),
+                          // ),
+                        ],
+                      ),
                     ),
                   )
                 ],
@@ -188,8 +197,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   void save() {
+    int i, f = 0;
+    for (i = 0; i <= newExpenseAmountController.text.length.toInt() - 1; i++) {
+      String n = newExpenseAmountController.text[i];
+      if (n == "1" ||
+          n == "2" ||
+          n == "3" ||
+          n == "4" ||
+          n == "5" ||
+          n == "6" ||
+          n == "7" ||
+          n == "8" ||
+          n == "9" ||
+          n == "0" ||
+          n == ".") {
+      } else {
+        f = 1;
+      }
+    }
     if (newExpenseNameController.text.isNotEmpty &&
-        newExpenseAmountController.text.isNotEmpty) {
+        newExpenseAmountController.text.isNotEmpty &&
+        f == 0) {
       ExpenseItem newExpense = ExpenseItem(
           name: newExpenseNameController.text,
           amount: newExpenseAmountController.text,
@@ -211,25 +239,68 @@ class _HomePageState extends State<HomePage> {
     newExpenseAmountController.clear();
   }
 
-  bool cond = false;
+  final _key = GlobalKey<ExpandableFabState>();
   @override
   Widget build(BuildContext context) {
     return Consumer<ExpenseData>(
         builder: (context, value, child) => Scaffold(
-            floatingActionButton: InkWell(
-              onLongPress: () {
-                setState(() {
-                  cond = !cond;
-                });
-              },
-              child: FloatingActionButton(
-                onPressed: addNewExpense,
-                backgroundColor: cond == true ? Colors.white24 : Colors.blue,
-                child: Icon(
-                  Icons.add,
-                  color: cond == true ? Colors.white24 : Colors.black,
-                ),
+            floatingActionButtonLocation: ExpandableFab.location,
+            floatingActionButton: ExpandableFab(
+              key: _key,
+              distance: 65,
+              type: ExpandableFabType.fan,
+              overlayStyle: ExpandableFabOverlayStyle(blur: 2),
+              openButtonBuilder: RotateFloatingActionButtonBuilder(
+                child: const Icon(EvaIcons.menu),
+                fabSize: ExpandableFabSize.regular,
+                foregroundColor: Colors.white70,
+                backgroundColor: Colors.blueAccent,
               ),
+              closeButtonBuilder: RotateFloatingActionButtonBuilder(
+                child: const Icon(EvaIcons.close),
+                fabSize: ExpandableFabSize.regular,
+                foregroundColor: Colors.white70,
+                backgroundColor: Colors.blueAccent,
+              ),
+              children: [
+                FloatingActionButton(
+                  heroTag: null,
+                  backgroundColor: Colors.blueAccent,
+                  child: const Icon(
+                    EvaIcons.calendarOutline,
+                    color: Colors.white70,
+                  ),
+                  onPressed: () {
+                    final state = _key.currentState;
+                    if (state != null) {
+                      debugPrint('isOpen:${state.isOpen}');
+                      state.toggle();
+                    }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MonthShow()));
+                  },
+                ),
+                FloatingActionButton(
+                  heroTag: null,
+                  backgroundColor: Colors.blueAccent,
+                  child: const Icon(
+                    EvaIcons.plus,
+                    color: Colors.white70,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      final state = _key.currentState;
+                      if (state != null) {
+                        debugPrint('isOpen:${state.isOpen}');
+                        state.toggle();
+                      }
+                      addNewExpense();
+                    });
+                  },
+                ),
+              ],
             ),
             body: SafeArea(
               child: ListView(

@@ -9,3 +9,10 @@ class ExpenseItem {
     required this.dateTime,
   });
 }
+
+class Month {
+  String month;
+  String amount;
+
+  Month({required this.month, required this.amount});
+}

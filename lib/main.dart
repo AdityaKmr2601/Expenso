@@ -1,4 +1,4 @@
-import 'package:expenso/Home.dart';
+import 'package:expenso/Splash.dart';
 import 'package:expenso/data/expense_data.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -29,6 +29,6 @@ class MyApp extends StatelessWidget {
                 fontFamily: "Sans",
                 floatingActionButtonTheme: const FloatingActionButtonThemeData(
                     backgroundColor: Colors.blue)),
-            home: const HomePage()));
+            home: const Splash()));
   }
 }

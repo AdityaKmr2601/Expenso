@@ -105,6 +105,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.5"
+  eva_icons_flutter:
+    dependency: "direct main"
+    description:
+      name: eva_icons_flutter
+      sha256: "6d48a10b93590ab83eb092bee5adacdeb14f3d83f527a4b9e4092c363d56e2a8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -134,6 +142,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_expandable_fab:
+    dependency: "direct main"
+    description:
+      name: flutter_expandable_fab
+      sha256: "2aa5735bebcdbc49f43bcb32a29f9f03a9b7029212b8cd9837ae332ab2edf647"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   flutter_launcher_icons:
     dependency: "direct main"
     description:
@@ -211,6 +227,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  lottie:
+    dependency: "direct main"
+    description:
+      name: lottie
+      sha256: a93542cc2d60a7057255405f62252533f8e8956e7e06754955669fd32fb4b216
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.7.0"
   matcher:
     dependency: transitive
     description:
@@ -339,6 +363,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.1"
+  simple_gradient_text:
+    dependency: "direct main"
+    description:
+      name: simple_gradient_text
+      sha256: "4e683a7d49547a619489f7abd462e7fab77db9559979ee96cdaeb61059664900"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -450,4 +482,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.2.0 <4.0.0"
-  flutter: ">=3.7.0"
+  flutter: ">=3.13.0"

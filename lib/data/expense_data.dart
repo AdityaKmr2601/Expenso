@@ -1,4 +1,5 @@
 import 'package:expenso/data/hive_database.dart';
+import 'package:expenso/data/month.dart';
 import 'package:expenso/datetime/date_time_helper.dart';
 import 'package:flutter/foundation.dart';
 
@@ -6,19 +7,89 @@ import '../models/expense_item.dart';
 
 class ExpenseData extends ChangeNotifier {
   List<ExpenseItem> overallExpenseList = [];
+  List<Month> monthList = [];
 
   List<ExpenseItem> getAllExpenseList() {
     return overallExpenseList;
   }
 
+  List<Month> getAllMonthList() {
+    return monthList;
+  }
+
+  String monthName(int monthNumber) {
+    String name = '';
+    if (monthNumber == 1) {
+      name = "Jan";
+    }
+    if (monthNumber == 2) {
+      name = "Feb";
+    }
+    if (monthNumber == 3) {
+      name = "Mar";
+    }
+    if (monthNumber == 4) {
+      name = "Apr";
+    }
+    if (monthNumber == 5) {
+      name = "May";
+    }
+    if (monthNumber == 6) {
+      name = "June";
+    }
+    if (monthNumber == 7) {
+      name = "July";
+    }
+    if (monthNumber == 8) {
+      name = "Aug";
+    }
+    if (monthNumber == 9) {
+      name = "Sept";
+    }
+    if (monthNumber == 10) {
+      name = "Oct";
+    }
+    if (monthNumber == 11) {
+      name = "Nov";
+    }
+    if (monthNumber == 12) {
+      name = "Dec";
+    }
+
+    return name;
+  }
+
+  void save() {
+    Month monthExpense = Month(
+        month: "${monthName(DateTime.now().month)} ${DateTime.now().year}",
+        amount: monthly().toString());
+    addNewMonth(monthExpense);
+  }
+
+  void addNewMonth(Month monthExpense) {
+    monthList.add(monthExpense);
+    notifyListeners();
+    db2.saveData(monthList);
+  }
+
   final db = HiveDataBase();
+  final db2 = HiveDataBase2();
+
   void prepareData() {
     DateTime dateTime = DateTime.now();
-    if (dateTime.day == 2 && dateTime.hour == 00) {
-      clearData();
+    if (dateTime.day >= 1) {
+      if (db.readData().isNotEmpty) {
+        if (db.readData()[0].dateTime.month != dateTime.month) {
+          save();
+          clearData();
+        }
+      }
     }
     if (db.readData().isNotEmpty) {
       overallExpenseList = db.readData();
+    }
+    if (db2.readData().isNotEmpty) {
+      monthList = db2.readData();
     }
   }
 
@@ -74,12 +145,12 @@ class ExpenseData extends ChangeNotifier {
   }
 
   double monthly() {
-    double monthly = 0;
+    double monthlyV = 0;
     for (var expense in overallExpenseList) {
       double amount = double.parse(expense.amount);
-      monthly += amount;
+      monthlyV += amount;
     }
-    return monthly;
+    return monthlyV;
   }
 
   Map<String, double> calculateDailyExpenseSummary() {

@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class ExpenseTile extends StatefulWidget {
+class MonthTile extends StatefulWidget {
   final String name;
   final String amount;
-  final DateTime dateTime;
   void Function(BuildContext)? deleteTapped;
 
-  ExpenseTile(
-      {super.key,
-      required this.name,
-      required this.amount,
-      required this.dateTime,
-      this.deleteTapped});
+  MonthTile(
+      {super.key, required this.name, required this.amount, this.deleteTapped});
 
   @override
-  State<ExpenseTile> createState() => _ExpenseTileState();
+  State<MonthTile> createState() => _MonthTileState();
 }
 
-class _ExpenseTileState extends State<ExpenseTile> {
+class _MonthTileState extends State<MonthTile> {
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -49,8 +44,6 @@ class _ExpenseTileState extends State<ExpenseTile> {
                   widget.name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text(
-                    "${widget.dateTime.day}/${widget.dateTime.month}/${widget.dateTime.year}    ${widget.dateTime.hour}:${widget.dateTime.minute}"),
                 trailing: Text(
                   "₹${widget.amount}",
                   style: const TextStyle(fontWeight: FontWeight.bold),

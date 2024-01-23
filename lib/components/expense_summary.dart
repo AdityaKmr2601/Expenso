@@ -3,6 +3,7 @@ import 'package:expenso/data/expense_data.dart';
 import 'package:expenso/datetime/date_time_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class ExpenseSummary extends StatelessWidget {
   final DateTime startOfWeek;
@@ -89,9 +90,22 @@ class ExpenseSummary extends StatelessWidget {
                   padding: const EdgeInsets.all(25.0),
                   child: Column(
                     children: [
+                      GradientText(
+                        "Fr: 1/${dateTime.month}/${dateTime.year}  To: ${dateTime.day}/${dateTime.month}/${dateTime.year}",
+                        style: const TextStyle(fontFamily: "Sans"),
+                        colors: const [
+                          Colors.purpleAccent,
+                          Colors.blueAccent,
+                        ],
+                      ),
                       Text(
-                          "From: 2-${dateTime.month}-${dateTime.year}  To: ${dateTime.day}-${dateTime.month}-${dateTime.year}"),
-                      SizedBox(
+                        "(${dateTime.day - 1} days)",
+                        style: const TextStyle(
+                            fontFamily: "Sans",
+                            color: Colors.white70,
+                            fontSize: 13),
+                      ),
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
@@ -115,21 +129,8 @@ class ExpenseSummary extends StatelessWidget {
                     ],
                   ),
                 ),
-                (dateTime.day == 1)
-                    ? const Column(
-                        children: [
-                          Text(
-                            "THE DATA WILL BE CLEARED TOMORROW",
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Sans"),
-                          ),
-                        ],
-                      )
-                    : const SizedBox(),
                 const SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
                 SizedBox(
                   height: 200,
