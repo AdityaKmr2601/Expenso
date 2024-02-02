@@ -60,10 +60,13 @@ class ExpenseData extends ChangeNotifier {
   }
 
   void save() {
+    print(DateTime.now().month);
     Month monthExpense = Month(
-        month: "${monthName(DateTime.now().month)} ${DateTime.now().year}",
+        month:
+            "${monthName((DateTime.now().month == 1) ? 12 : DateTime.now().month - 1)} ${(DateTime.now().month == 1) ? DateTime.now().year - 1 : DateTime.now().year}",
         amount: monthly().toString());
     addNewMonth(monthExpense);
+    clearData();
   }
 
   void addNewMonth(Month monthExpense) {
@@ -77,19 +80,18 @@ class ExpenseData extends ChangeNotifier {
 
   void prepareData() {
     DateTime dateTime = DateTime.now();
-    if (dateTime.day >= 1) {
-      if (db.readData().isNotEmpty) {
-        if (db.readData()[0].dateTime.month != dateTime.month) {
-          save();
-          clearData();
-        }
-      }
-    }
     if (db.readData().isNotEmpty) {
       overallExpenseList = db.readData();
     }
     if (db2.readData().isNotEmpty) {
       monthList = db2.readData();
+    }
+    if (dateTime.day >= 1) {
+      if (db.readData().isNotEmpty) {
+        if (db.readData()[0].dateTime.month != dateTime.month) {
+          save();
+        }
+      }
     }
   }
 
@@ -103,6 +105,12 @@ class ExpenseData extends ChangeNotifier {
     overallExpenseList.remove(expense);
     notifyListeners();
     db.saveData(overallExpenseList);
+  }
+
+  void deleteMonth(Month expense) {
+    monthList.remove(expense);
+    notifyListeners();
+    db2.saveData(monthList);
   }
 
   void clearData() {
