@@ -23,21 +23,25 @@ class _MonthShowState extends State<MonthShow> {
   Widget build(BuildContext context) {
     return Consumer<ExpenseData>(
         builder: (context, value, child) => Scaffold(
-                body: SafeArea(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(CupertinoIcons.back),
+                color: Colors.blue,
+              ),
+              centerTitle: true,
+              title: Text(
+                "Monthly Expense",
+                style: TextStyle(fontFamily: "Sans", fontSize: 20),
+              ),
+            ),
+            body: SafeArea(
               child: ListView(
                 children: [
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(CupertinoIcons.back),
-                        color: Colors.blue,
-                      ),
-                    ],
-                  ),
                   const Divider(
                     color: Colors.white24,
                   ),
