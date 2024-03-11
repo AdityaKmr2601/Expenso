@@ -4,8 +4,10 @@ import 'package:expenso/components/expense_summary.dart';
 import 'package:expenso/components/expense_tile.dart';
 import 'package:expenso/data/expense_data.dart';
 import 'package:expenso/models/expense_item.dart';
+import 'package:expenso/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,6 +25,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    if (Hive.box("theme").isEmpty) {
+      Hive.box("theme").put(1, "lightMode");
+    }
     Provider.of<ExpenseData>(context, listen: false).prepareData();
   }
 
@@ -30,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              backgroundColor: Colors.black,
+              backgroundColor: ThemeProvider().themeData.focusColor,
               title: const Text(
                 "ADD NEW EXPENSE",
                 style:
@@ -49,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(2.0),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: ThemeProvider().themeData.cardColor,
                             borderRadius: BorderRadius.circular(4)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -57,11 +62,13 @@ class _HomePageState extends State<HomePage> {
                             textInputAction: TextInputAction.next,
                             textCapitalization: TextCapitalization.words,
                             autofocus: true,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Expense Name",
                                 hintStyle: TextStyle(
-                                    color: Colors.white54, fontFamily: "Sans")),
+                                    color:
+                                        ThemeProvider().themeData.canvasColor,
+                                    fontFamily: "Sans")),
                             controller: newExpenseNameController,
                           ),
                         ),
@@ -80,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(2.0),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: ThemeProvider().themeData.cardColor,
                             borderRadius: BorderRadius.circular(4)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -88,14 +95,18 @@ class _HomePageState extends State<HomePage> {
                             onSubmitted: (value) {
                               save();
                             },
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Price",
                                 prefixText: "₹  ",
                                 prefixStyle: TextStyle(
-                                    color: Colors.white54, fontSize: 20),
+                                    color:
+                                        ThemeProvider().themeData.canvasColor,
+                                    fontSize: 20),
                                 hintStyle: TextStyle(
-                                    color: Colors.white54, fontFamily: "Sans")),
+                                    color:
+                                        ThemeProvider().themeData.canvasColor,
+                                    fontFamily: "Sans")),
                             controller: newExpenseAmountController,
                             keyboardType: TextInputType.number,
                           ),
@@ -105,19 +116,20 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 20),
                   Flexible(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
+                    child: Flexible(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          MaterialButton(
-                            onPressed: () {
-                              setState(() {
-                                newExpenseNameController.value =
-                                    const TextEditingValue(text: "Snacks");
-                              });
-                            },
-                            child: Image.asset('images/chai.png'),
+                          Flexible(
+                            child: MaterialButton(
+                              onPressed: () {
+                                setState(() {
+                                  newExpenseNameController.value =
+                                      const TextEditingValue(text: "Snacks");
+                                });
+                              },
+                              child: Image.asset('images/chai.png'),
+                            ),
                           ),
                           // MaterialButton(
                           //   onPressed: () {
@@ -131,25 +143,29 @@ class _HomePageState extends State<HomePage> {
                           //   },
                           //   child: Image.asset('images/tiffin.png'),
                           // ),
-
-                          MaterialButton(
-                            onPressed: () {
-                              setState(() {
-                                newExpenseNameController.value =
-                                    const TextEditingValue(text: "Vegetables");
-                                newExpenseAmountController.clear();
-                              });
-                            },
-                            child: Image.asset('images/vegetables.png'),
+                          Flexible(
+                            child: MaterialButton(
+                              onPressed: () {
+                                setState(() {
+                                  newExpenseNameController.value =
+                                      const TextEditingValue(
+                                          text: "Vegetables");
+                                  newExpenseAmountController.clear();
+                                });
+                              },
+                              child: Image.asset('images/vegetables.png'),
+                            ),
                           ),
-                          MaterialButton(
-                            onPressed: () {
-                              setState(() {
-                                newExpenseNameController.value =
-                                    const TextEditingValue(text: "Medicine");
-                              });
-                            },
-                            child: Image.asset('images/medicine.png'),
+                          Flexible(
+                            child: MaterialButton(
+                              onPressed: () {
+                                setState(() {
+                                  newExpenseNameController.value =
+                                      const TextEditingValue(text: "Medicine");
+                                });
+                              },
+                              child: Image.asset('images/medicine.png'),
+                            ),
                           ),
                           // MaterialButton(
                           //   onPressed: () {
@@ -247,7 +263,7 @@ class _HomePageState extends State<HomePage> {
             floatingActionButtonLocation: ExpandableFab.location,
             floatingActionButton: ExpandableFab(
               key: _key,
-              distance: 65,
+              distance: 90,
               type: ExpandableFabType.fan,
               overlayStyle: ExpandableFabOverlayStyle(blur: 2),
               openButtonBuilder: RotateFloatingActionButtonBuilder(
@@ -285,6 +301,20 @@ class _HomePageState extends State<HomePage> {
                 FloatingActionButton(
                   heroTag: null,
                   backgroundColor: Colors.blueAccent,
+                  child: Icon(
+                    (ThemeProvider().isDarkMode) ? EvaIcons.sun : EvaIcons.moon,
+                    color: Colors.white70,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      Provider.of<ThemeProvider>(context, listen: false)
+                          .toggleTheme();
+                    });
+                  },
+                ),
+                FloatingActionButton(
+                  heroTag: null,
+                  backgroundColor: Colors.blueAccent,
                   child: const Icon(
                     EvaIcons.plus,
                     color: Colors.white70,
@@ -312,8 +342,8 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  const Divider(
-                    color: Colors.white24,
+                  Divider(
+                    color: ThemeProvider().themeData.splashColor,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8),

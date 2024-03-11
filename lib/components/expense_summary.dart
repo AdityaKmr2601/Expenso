@@ -65,15 +65,7 @@ class ExpenseSummary extends StatelessWidget {
     return total.toStringAsFixed(2);
   }
 
-  int dayGetter() {
-    if (ExpenseData().db.readData().isNotEmpty) {
-      return ExpenseData().db.readData()[0].dateTime.day;
-    } else {
-      return dateTime.day;
-    }
-  }
-
-  final DateTime dateTime = DateTime.now();
+  DateTime dateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -98,38 +90,21 @@ class ExpenseSummary extends StatelessWidget {
                   padding: const EdgeInsets.all(25.0),
                   child: Column(
                     children: [
-                      (dateTime.day == dayGetter())
-                          ? GradientText(
-                              "Starting Today",
-                              style: const TextStyle(fontFamily: "Sans"),
-                              colors: const [
-                                Colors.purpleAccent,
-                                Colors.blueAccent,
-                              ],
-                            )
-                          : GradientText(
-                              "Fr: ${dayGetter()}/${dateTime.month}/${dateTime.year}  To: ${dateTime.day}/${dateTime.month}/${dateTime.year}",
-                              style: const TextStyle(fontFamily: "Sans"),
-                              colors: const [
-                                Colors.purpleAccent,
-                                Colors.blueAccent,
-                              ],
-                            ),
-                      (dateTime.day == dayGetter())
-                          ? Text(
-                              "(${dateTime.day}/${dateTime.month}/${dateTime.year})",
-                              style: const TextStyle(
-                                  fontFamily: "Sans",
-                                  color: Colors.white70,
-                                  fontSize: 13),
-                            )
-                          : Text(
-                              "(${dateTime.day - dayGetter()} days)",
-                              style: const TextStyle(
-                                  fontFamily: "Sans",
-                                  color: Colors.white70,
-                                  fontSize: 13),
-                            ),
+                      GradientText(
+                        "Fr: 1/${dateTime.month}/${dateTime.year}  To: ${dateTime.day}/${dateTime.month}/${dateTime.year}",
+                        style: const TextStyle(fontFamily: "Sans"),
+                        colors: const [
+                          Colors.purpleAccent,
+                          Colors.blueAccent,
+                        ],
+                      ),
+                      Text(
+                        "(${dateTime.day - 1} days)",
+                        style: const TextStyle(
+                            fontFamily: "Sans",
+                            color: Colors.white70,
+                            fontSize: 13),
+                      ),
                       const SizedBox(
                         height: 10,
                       ),

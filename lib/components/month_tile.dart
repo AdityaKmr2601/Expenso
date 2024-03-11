@@ -1,3 +1,4 @@
+import 'package:expenso/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -37,9 +38,9 @@ class _MonthTileState extends State<MonthTile> {
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
-                  color: Colors.black87),
+                  color: ThemeProvider().themeData.cardColor),
               child: ListTile(
-                tileColor: Colors.black,
+                tileColor: ThemeProvider().themeData.focusColor,
                 title: Text(
                   widget.name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
