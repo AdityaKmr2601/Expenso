@@ -1,6 +1,7 @@
 import 'package:expenso/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class MonthTile extends StatefulWidget {
   final String name;
@@ -31,8 +32,21 @@ class _MonthTileState extends State<MonthTile> {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              gradient: const LinearGradient(
-                  colors: [Colors.purpleAccent, Colors.blueAccent])),
+              gradient: LinearGradient(
+                colors: (Hive.box("theme").get(0) == 0)
+                    ? [Colors.purpleAccent, Colors.blueAccent]
+                    : (ThemeProvider().isDarkMode)
+                        ? [
+                            Colors.green,
+                            const Color(0xff43EA82),
+                            const Color(0xff0AF2A6),
+                          ]
+                        : [
+                            Colors.blue.shade400,
+                            Colors.blueAccent.shade400,
+                            Colors.blueAccent.shade700,
+                          ],
+              )),
           child: Padding(
             padding: const EdgeInsets.all(2.0),
             child: Container(

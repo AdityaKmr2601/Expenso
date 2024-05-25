@@ -11,4 +11,7 @@ ThemeData lightMode = ThemeData(
   focusColor: Colors.white,
   canvasColor: Colors.black54,
   splashColor: Colors.black54,
+  shadowColor: Colors.grey.shade100,
+  dividerColor: Colors.black,
+  secondaryHeaderColor: Colors.blueAccent,
 );

@@ -10,4 +10,7 @@ ThemeData darkMode = ThemeData(
   canvasColor: Colors.white70,
   focusColor: Colors.black,
   splashColor: Colors.white24,
+  shadowColor: Colors.grey.shade900,
+  dividerColor: Colors.white,
+  secondaryHeaderColor: Colors.green,
 );

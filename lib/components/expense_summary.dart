@@ -1,17 +1,24 @@
 import 'package:expenso/bar%20graph/bar_graph.dart';
 import 'package:expenso/data/expense_data.dart';
 import 'package:expenso/datetime/date_time_helper.dart';
+import 'package:expenso/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
-class ExpenseSummary extends StatelessWidget {
+class ExpenseSummary extends StatefulWidget {
   final DateTime startOfWeek;
-  ExpenseSummary({
+  const ExpenseSummary({
     super.key,
     required this.startOfWeek,
   });
 
+  @override
+  State<ExpenseSummary> createState() => _ExpenseSummaryState();
+}
+
+class _ExpenseSummaryState extends State<ExpenseSummary> {
   double calculateMax(
       ExpenseData value,
       String sunday,
@@ -65,46 +72,85 @@ class ExpenseSummary extends StatelessWidget {
     return total.toStringAsFixed(2);
   }
 
+  int dayGetter() {
+    if (ExpenseData().db.readData().isNotEmpty) {
+      return ExpenseData().db.readData()[0].dateTime.day;
+    } else {
+      return dateTime.day;
+    }
+  }
+
   DateTime dateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    String sunday =
-        convertDateTimeToString(startOfWeek.add(const Duration(days: 0)));
-    String monday =
-        convertDateTimeToString(startOfWeek.add(const Duration(days: 1)));
-    String tuesday =
-        convertDateTimeToString(startOfWeek.add(const Duration(days: 2)));
-    String wednesday =
-        convertDateTimeToString(startOfWeek.add(const Duration(days: 3)));
-    String thursday =
-        convertDateTimeToString(startOfWeek.add(const Duration(days: 4)));
-    String friday =
-        convertDateTimeToString(startOfWeek.add(const Duration(days: 5)));
-    String saturday =
-        convertDateTimeToString(startOfWeek.add(const Duration(days: 6)));
+    String sunday = convertDateTimeToString(
+        widget.startOfWeek.add(const Duration(days: 0)));
+    String monday = convertDateTimeToString(
+        widget.startOfWeek.add(const Duration(days: 1)));
+    String tuesday = convertDateTimeToString(
+        widget.startOfWeek.add(const Duration(days: 2)));
+    String wednesday = convertDateTimeToString(
+        widget.startOfWeek.add(const Duration(days: 3)));
+    String thursday = convertDateTimeToString(
+        widget.startOfWeek.add(const Duration(days: 4)));
+    String friday = convertDateTimeToString(
+        widget.startOfWeek.add(const Duration(days: 5)));
+    String saturday = convertDateTimeToString(
+        widget.startOfWeek.add(const Duration(days: 6)));
     return Consumer<ExpenseData>(
         builder: (context, value, child) => Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(25.0),
+                  padding: const EdgeInsets.only(
+                      top: 10, left: 25.0, right: 25, bottom: 25),
                   child: Column(
                     children: [
-                      GradientText(
-                        "Fr: 1/${dateTime.month}/${dateTime.year}  To: ${dateTime.day}/${dateTime.month}/${dateTime.year}",
-                        style: const TextStyle(fontFamily: "Sans"),
-                        colors: const [
-                          Colors.purpleAccent,
-                          Colors.blueAccent,
-                        ],
-                      ),
-                      Text(
-                        "(${dateTime.day - 1} days)",
-                        style: const TextStyle(
-                            fontFamily: "Sans",
-                            color: Colors.white70,
-                            fontSize: 13),
-                      ),
+                      (dateTime.day == dayGetter())
+                          ? (Hive.box("theme").get(0) == 0
+                              ? GradientText(
+                                  "Starting Today",
+                                  style: const TextStyle(fontFamily: "Sans"),
+                                  colors: const [
+                                    Colors.purpleAccent,
+                                    Colors.blueAccent,
+                                  ],
+                                )
+                              : Text(
+                                  "Starting Today",
+                                  style: TextStyle(
+                                      fontFamily: "Sans",
+                                      color: (ThemeProvider().isDarkMode)
+                                          ? const Color(0xff0AF2A6)
+                                          : Colors.blueAccent.shade200),
+                                ))
+                          : (Hive.box("theme").get(0) == 0
+                              ? GradientText(
+                                  "Fr: ${dayGetter()}/${dateTime.month}/${dateTime.year}  To: ${dateTime.day}/${dateTime.month}/${dateTime.year}",
+                                  style: const TextStyle(fontFamily: "Sans"),
+                                  colors: const [
+                                    Colors.purpleAccent,
+                                    Colors.blueAccent,
+                                  ],
+                                )
+                              : Text(
+                                  "Fr: ${dayGetter()}/${dateTime.month}/${dateTime.year}  To: ${dateTime.day}/${dateTime.month}/${dateTime.year}",
+                                  style: TextStyle(
+                                    fontFamily: "Sans",
+                                    color: (ThemeProvider().isDarkMode)
+                                        ? const Color(0xff0AF2A6)
+                                        : Colors.blueAccent.shade200,
+                                  ),
+                                )),
+                      (dateTime.day != dayGetter())
+                          ? Text(
+                              "(${dateTime.day - 1} days)",
+                              style: TextStyle(
+                                  fontFamily: "Sans",
+                                  color: ThemeProvider().themeData.canvasColor,
+                                  fontSize: 13),
+                            )
+                          : const SizedBox(),
                       const SizedBox(
                         height: 10,
                       ),
@@ -120,12 +166,35 @@ class ExpenseSummary extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              const Text("Monthly Total: "),
+                              const Text("Month Total: "),
                               Text("₹${value.monthly()}"),
                             ],
                           ),
                         ],
                       ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            (Hive.box("budget").get(1) == '' ||
+                                    Hive.box("budget").values.isEmpty)
+                                ? const SizedBox()
+                                : Text("Budget: ₹${Hive.box("budget").get(1)}"),
+                            (Hive.box("budget").get(1) == '' ||
+                                    Hive.box("budget").values.isEmpty)
+                                ? const SizedBox()
+                                : Text(
+                                    "Budget Left: ₹${double.parse(Hive.box("budget").get(1)) - value.monthly()}",
+                                    style: TextStyle(
+                                        color: (double.parse(Hive.box("budget")
+                                                        .get(1)) -
+                                                    value.monthly() <
+                                                0)
+                                            ? Colors.red
+                                            : ThemeProvider()
+                                                .themeData
+                                                .dividerColor),
+                                  ),
+                          ])
                     ],
                   ),
                 ),

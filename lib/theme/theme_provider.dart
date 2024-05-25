@@ -16,6 +16,12 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void check() {
+    if (Hive.box("theme").values.isEmpty) {
+      Hive.box("theme").put(1, "darkMode");
+    }
+  }
+
   void toggleTheme() {
     if (_themeData == lightMode) {
       themeData = darkMode;
@@ -25,4 +31,6 @@ class ThemeProvider extends ChangeNotifier {
       mybox.put(1, "lightMode");
     }
   }
+
+  void mono() {}
 }

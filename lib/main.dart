@@ -11,8 +11,11 @@ void main() async {
   await Hive.openBox("expense_database");
   await Hive.openBox("month");
   await Hive.openBox("theme");
+  await Hive.openBox("name");
+  await Hive.openBox("budget");
+  await Hive.openBox("theme");
 
-  //Setting SysemUIOverlay
+  //Setting SystemUIOverlay
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemStatusBarContrastEnforced: true,
       systemNavigationBarColor: Colors.transparent,
@@ -30,11 +33,21 @@ void main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
+  void initState() {
+    super.initState();
+    ThemeProvider().check();
+  }
+
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => ExpenseData(),

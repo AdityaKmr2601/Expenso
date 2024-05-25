@@ -2,6 +2,7 @@ import 'package:expenso/bar%20graph/bar_data.dart';
 import 'package:expenso/theme/theme_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class MyBarGraph extends StatelessWidget {
   final double? maxY;
@@ -59,31 +60,59 @@ class MyBarGraph extends StatelessWidget {
                 (data) => BarChartGroupData(
                   x: data.x,
                   barRods: [
-                    BarChartRodData(
-                        toY: data.y,
-                        gradient: LinearGradient(
-                            colors: (ThemeProvider().isDarkMode)
-                                ? [
-                                    Colors.purpleAccent,
-                                    Colors.blueAccent,
-                                  ]
-                                : [
-                                    Colors.purpleAccent.shade100,
-                                    Colors.blueAccent,
-                                  ],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter),
-                        width: 25,
-                        borderRadius: BorderRadius.circular(4),
-                        backDrawRodData: BackgroundBarChartRodData(
-                            show: true,
-                            toY: maxY,
+                    Hive.box("theme").get(0) == 0
+                        ? BarChartRodData(
+                            toY: data.y,
                             gradient: LinearGradient(
                                 colors: (ThemeProvider().isDarkMode)
-                                    ? [Colors.white10, Colors.white12]
-                                    : [Colors.black12, Colors.black12],
+                                    ? [
+                                        Colors.purpleAccent,
+                                        Colors.blueAccent,
+                                      ]
+                                    : [
+                                        Colors.purpleAccent.shade100,
+                                        Colors.blueAccent,
+                                      ],
                                 begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter))),
+                                end: Alignment.topCenter),
+                            width: 25,
+                            borderRadius: BorderRadius.circular(4),
+                            backDrawRodData: BackgroundBarChartRodData(
+                                show: true,
+                                toY: maxY,
+                                gradient: LinearGradient(
+                                    colors: (ThemeProvider().isDarkMode)
+                                        ? [Colors.white10, Colors.white12]
+                                        : [Colors.black12, Colors.black12],
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter)))
+                        : BarChartRodData(
+                            toY: data.y,
+                            gradient: LinearGradient(
+                                colors: (ThemeProvider().isDarkMode)
+                                    ? [
+                                        Colors.green,
+                                        const Color(0xff43EA82),
+                                        const Color(0xff0AF2A6),
+                                      ]
+                                    : [
+                                        Colors.blue.shade400,
+                                        Colors.blueAccent.shade400,
+                                        Colors.blueAccent.shade700,
+                                      ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter),
+                            width: 25,
+                            borderRadius: BorderRadius.circular(4),
+                            backDrawRodData: BackgroundBarChartRodData(
+                                show: true,
+                                toY: maxY,
+                                gradient: LinearGradient(
+                                    colors: (ThemeProvider().isDarkMode)
+                                        ? [Colors.white10, Colors.white12]
+                                        : [Colors.black12, Colors.black12],
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter))),
                   ],
                 ),
               )

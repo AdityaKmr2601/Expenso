@@ -1,8 +1,11 @@
-import 'dart:async';
-
+import 'package:expenso/Draw.dart';
 import 'package:expenso/Home.dart';
+import 'package:expenso/Name_Screen.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:lottie/lottie.dart';
+
+final mybox = Hive.box("name");
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -19,7 +22,10 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
     _controller = AnimationController(vsync: this);
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  (mybox.values.isEmpty) ? Name() : HomePage()));
     });
   }
 
