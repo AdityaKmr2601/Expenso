@@ -144,7 +144,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                                 )),
                       (dateTime.day != dayGetter())
                           ? Text(
-                              "(${dateTime.day - 1} days)",
+                              "(${dateTime.day - dayGetter()} days)",
                               style: TextStyle(
                                   fontFamily: "Sans",
                                   color: ThemeProvider().themeData.canvasColor,
@@ -176,11 +176,15 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             (Hive.box("budget").get(1) == '' ||
-                                    Hive.box("budget").values.isEmpty)
+                                    Hive.box("budget").values.isEmpty ||
+                                    double.parse(Hive.box("budget").get(1)) ==
+                                        0)
                                 ? const SizedBox()
                                 : Text("Budget: ₹${Hive.box("budget").get(1)}"),
                             (Hive.box("budget").get(1) == '' ||
-                                    Hive.box("budget").values.isEmpty)
+                                    Hive.box("budget").values.isEmpty ||
+                                    double.parse(Hive.box("budget").get(1)) ==
+                                        0)
                                 ? const SizedBox()
                                 : Text(
                                     "Budget Left: ₹${double.parse(Hive.box("budget").get(1)) - value.monthly()}",
@@ -202,7 +206,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                   height: 10,
                 ),
                 SizedBox(
-                  height: 200,
+                  height: Hive.box("theme").get(2) == 0 ? 200 : 170,
                   child: MyBarGraph(
                       maxY: calculateMax(value, sunday, monday, tuesday,
                           wednesday, thursday, friday, saturday),

@@ -16,3 +16,18 @@ class Month {
 
   Month({required this.month, required this.amount});
 }
+
+class Lend {
+  String name;
+  String amount;
+  DateTime dateTime;
+  Lend({required this.name, required this.amount, required this.dateTime});
+}
+
+class Borrow {
+  String name;
+  String amount;
+  DateTime dateTime;
+
+  Borrow({required this.name, required this.amount, required this.dateTime});
+}

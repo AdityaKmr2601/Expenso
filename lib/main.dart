@@ -1,4 +1,5 @@
 import 'package:expenso/Splash.dart';
+import 'package:expenso/borrow_lend.dart';
 import 'package:expenso/data/expense_data.dart';
 import 'package:expenso/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,8 @@ void main() async {
   await Hive.openBox("name");
   await Hive.openBox("budget");
   await Hive.openBox("theme");
+  await Hive.openBox("Lend");
+  await Hive.openBox("Borrow");
 
   //Setting SystemUIOverlay
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -48,6 +51,7 @@ class _MyAppState extends State<MyApp> {
     ThemeProvider().check();
   }
 
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => ExpenseData(),

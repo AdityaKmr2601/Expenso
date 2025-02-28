@@ -1,3 +1,4 @@
+import 'package:expenso/data/borrow_lend.dart';
 import 'package:expenso/data/hive_database.dart';
 import 'package:expenso/data/month.dart';
 import 'package:expenso/datetime/date_time_helper.dart';
@@ -8,6 +9,8 @@ import '../models/expense_item.dart';
 class ExpenseData extends ChangeNotifier {
   List<ExpenseItem> overallExpenseList = [];
   List<Month> monthList = [];
+  List<Lend> lendList = [];
+  List<Borrow> borrowList = [];
 
   List<ExpenseItem> getAllExpenseList() {
     return overallExpenseList;
@@ -15,6 +18,14 @@ class ExpenseData extends ChangeNotifier {
 
   List<Month> getAllMonthList() {
     return monthList;
+  }
+
+  List<Lend> getAllLendList() {
+    return lendList;
+  }
+
+  List<Borrow> getAllBorrowList() {
+    return borrowList;
   }
 
   String monthName(int monthNumber) {
@@ -60,7 +71,6 @@ class ExpenseData extends ChangeNotifier {
   }
 
   void save() {
-    print(DateTime.now().month);
     Month monthExpense = Month(
         month:
             "${monthName((DateTime.now().month == 1) ? 12 : DateTime.now().month - 1)} ${(DateTime.now().month == 1) ? DateTime.now().year - 1 : DateTime.now().year}",
@@ -75,8 +85,22 @@ class ExpenseData extends ChangeNotifier {
     db2.saveData(monthList);
   }
 
+  void addNewLend(Lend lendExpense) {
+    lendList.add(lendExpense);
+    notifyListeners();
+    db3.saveData(lendList);
+  }
+
+  void addNewBorrow(Borrow borrowExpense) {
+    borrowList.add(borrowExpense);
+    notifyListeners();
+    db4.saveData(borrowList);
+  }
+
   final db = HiveDataBase();
   final db2 = HiveDataBase2();
+  final db3 = HiveDataBase3();
+  final db4 = HiveDataBase4();
 
   void prepareData() {
     DateTime dateTime = DateTime.now();
@@ -85,6 +109,12 @@ class ExpenseData extends ChangeNotifier {
     }
     if (db2.readData().isNotEmpty) {
       monthList = db2.readData();
+    }
+    if (db3.readData().isNotEmpty) {
+      lendList = db3.readData();
+    }
+    if (db4.readData().isNotEmpty) {
+      borrowList = db4.readData();
     }
     if (dateTime.day >= 1) {
       if (db.readData().isNotEmpty) {
@@ -111,6 +141,18 @@ class ExpenseData extends ChangeNotifier {
     monthList.remove(expense);
     notifyListeners();
     db2.saveData(monthList);
+  }
+
+  void deleteLend(Lend expense) {
+    lendList.remove(expense);
+    notifyListeners();
+    db3.saveData(lendList);
+  }
+
+  void deleteBorrow(Borrow expense) {
+    borrowList.remove(expense);
+    notifyListeners();
+    db4.saveData(borrowList);
   }
 
   void clearData() {
@@ -159,6 +201,24 @@ class ExpenseData extends ChangeNotifier {
       monthlyV += amount;
     }
     return monthlyV;
+  }
+
+  double lendAmt() {
+    double lendAmt = 0;
+    for (var expense in lendList) {
+      double amount = double.parse(expense.amount);
+      lendAmt += amount;
+    }
+    return lendAmt;
+  }
+
+  double borrowAmt() {
+    double borrowAmt = 0;
+    for (var expense in borrowList) {
+      double amount = double.parse(expense.amount);
+      borrowAmt += amount;
+    }
+    return borrowAmt;
   }
 
   Map<String, double> calculateDailyExpenseSummary() {

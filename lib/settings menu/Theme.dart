@@ -39,15 +39,22 @@ class _ThemeSettingState extends State<ThemeSetting> {
                   onPressed: () {
                     Restart.restartApp();
                   },
-                  child: const Text("Restart Now"),
+                  child: const Text(
+                    "Restart Now",
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
+              const SizedBox(width: 10),
               Flexible(
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text("Restart Later"),
+                  child: const Text(
+                    "Restart Later",
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             ],
@@ -102,6 +109,29 @@ class _ThemeSettingState extends State<ThemeSetting> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
+                    "Greeting",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  CupertinoSwitch(
+                      value: db.get(3) == 0 ? false : true,
+                      onChanged: (value) async {
+                        setState(() {
+                          if (db.get(3) == 0) {
+                            db.put(3, 1);
+                          } else {
+                            db.put(3, 0);
+                          }
+                          restartAlert();
+                          // Restart.restartApp();
+                        });
+                      }),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
                     "Mono Color",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -121,6 +151,28 @@ class _ThemeSettingState extends State<ThemeSetting> {
                 ],
               ),
               const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Filter Chips",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  CupertinoSwitch(
+                      value: db.get(2) == 0 ? false : true,
+                      onChanged: (value) async {
+                        setState(() {
+                          if (db.get(2) == 0) {
+                            db.put(2, 1);
+                          } else {
+                            db.put(2, 0);
+                          }
+                          restartAlert();
+                          // Restart.restartApp();
+                        });
+                      }),
+                ],
+              ),
               const SizedBox(height: 10),
             ],
           ),

@@ -14,4 +14,5 @@ ThemeData lightMode = ThemeData(
   shadowColor: Colors.grey.shade100,
   dividerColor: Colors.black,
   secondaryHeaderColor: Colors.blueAccent,
+  hoverColor: Colors.purpleAccent,
 );
