@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void addFilt() {
-    var dates;
+    dynamic dates;
     filters = [];
     result = [];
     var count = Provider.of<ExpenseData>(context, listen: false)
